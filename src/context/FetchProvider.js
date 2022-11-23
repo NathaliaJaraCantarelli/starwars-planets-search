@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 export const FetchContext = createContext();
 
 function FetchProvider({ children }) {
-  const [gitRepos, setGitRepos] = useState([]);
-  const [gitHeader, setGitHeader] = useState([]);
+  const [dataPlanets, setDataPlanets] = useState([]);
+  const [dataHeader, setDataHeader] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -20,8 +20,8 @@ function FetchProvider({ children }) {
           delete data.residents;
           tableData.push(Object.values(data));
         });
-        setGitRepos(tableData);
-        setGitHeader(Object.keys(tableHeader[0]));
+        setDataPlanets(tableData);
+        setDataHeader(Object.keys(tableHeader[0]));
       } catch (error) {
         console.log(error);
       } finally {
@@ -33,10 +33,10 @@ function FetchProvider({ children }) {
   }, []);
 
   const values = useMemo(() => ({
-    gitHeader,
-    gitRepos,
+    dataHeader,
+    dataPlanets,
     isLoading,
-  }), [gitHeader, gitRepos, isLoading]);
+  }), [dataHeader, dataPlanets, isLoading]);
 
   return (
     <FetchContext.Provider value={ values }>
