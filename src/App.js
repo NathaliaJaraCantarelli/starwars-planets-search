@@ -35,7 +35,7 @@ function App() {
           parseInt(planet[indexFilter], 10) !== parseInt(numberFilter, 10)));
     }
     const dataNumbersNames = dataNumbers.map((namePlanet) => namePlanet[0]);
-    setPlanetsNumberFilter([...dataNumbersNames, ...unknown]);
+    setPlanetsNumberFilter([...planetsNumberFilter, ...dataNumbersNames, ...unknown]);
   };
 
   return (
