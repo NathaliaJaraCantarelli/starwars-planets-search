@@ -2,18 +2,27 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import { FetchContext } from '../context/FetchProvider';
-import { dataHeader, dataPlanets } from './helpers/mockAPI';
+import FetchProvider, { FetchContext } from '../context/FetchProvider';
+import { dataHeader, dataPlanets, api } from './helpers/mockAPI';
 
 describe('Testa o App', () => {
   test('Se o inicia com Loanding...', () => {
+    const dez = 10;
+    const treze = 13;
+    global.fetch = jest.fn()
+      .mockResolvedValue(Promise
+        .resolve({
+          json: () => Promise.resolve(api),
+          ok: true,
+        }));
     render(
-      <FetchContext.Provider
-        value={ { dataPlanets, dataHeader, isLoading: false } }
-      >
+      <FetchProvider>
         <App />
-      </FetchContext.Provider>,
+      </FetchProvider>,
     );
+    expect(typeof api).toBe('object');
+    expect(dataPlanets.length).toBe(dez);
+    expect(dataHeader.length).toBe(treze);
     const loading = screen.getByText(/Loading.../i);
     expect(loading).toBeInTheDocument();
   });

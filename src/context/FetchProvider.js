@@ -22,8 +22,6 @@ function FetchProvider({ children }) {
         });
         setDataPlanets(tableData);
         setDataHeader(Object.keys(tableHeader[0]));
-      } catch (error) {
-        console.log(error);
       } finally {
         setIsLoading(true);
       }
