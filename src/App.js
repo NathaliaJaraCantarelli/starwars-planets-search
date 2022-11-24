@@ -7,18 +7,21 @@ function App() {
 
   const [searchName, setSearchName] = useState('');
   const [numberFilter, setNumberFilter] = useState(0);
-  const [planetsNumberFilter, setPlanetsNumberFilter] = useState([]);
+  const [populationFilter, setPopulationFilter] = useState([]);
+  const [orbitalFilter, setOrbitalFilter] = useState([]);
+  const [diameterFilter, setDiameterFilter] = useState([]);
+  const [rotationFilter, setRotationFilter] = useState([]);
+  const [surfaceFilter, setSurfaceFilter] = useState([]);
 
   const searchNameFilter = dataPlanets
     .filter((planet) => planet[0].toLowerCase().includes(searchName))
-    .filter((number) => !planetsNumberFilter.includes(number[0]));
+    .filter((number) => !populationFilter.includes(number[0]))
+    .filter((number) => !orbitalFilter.includes(number[0]))
+    .filter((number) => !diameterFilter.includes(number[0]))
+    .filter((number) => !rotationFilter.includes(number[0]))
+    .filter((number) => !surfaceFilter.includes(number[0]));
 
-  const clickButton = () => {
-    const select = isLoading && document.getElementsByTagName('select');
-    const indexFilter = dataHeader.indexOf(select[0].value);
-    const unknown = dataPlanets
-      .filter((dataUnknown) => dataUnknown[indexFilter] === 'unknown')
-      .map((nameUnknown) => nameUnknown[0]);
+  const dataNumberFunction = (select, indexFilter) => {
     let dataNumbers = [];
 
     if (select[1].value === 'maior que') {
@@ -34,8 +37,23 @@ function App() {
         .filter((planet) => (
           parseInt(planet[indexFilter], 10) !== parseInt(numberFilter, 10)));
     }
-    const dataNumbersNames = dataNumbers.map((namePlanet) => namePlanet[0]);
-    setPlanetsNumberFilter([...planetsNumberFilter, ...dataNumbersNames, ...unknown]);
+    return dataNumbers;
+  };
+
+  const clickButton = () => {
+    const select = isLoading && document.getElementsByTagName('select');
+    const indexFilter = dataHeader.indexOf(select[0].value);
+    const unknown = dataPlanets
+      .filter((dataUnknown) => dataUnknown[indexFilter] === 'unknown')
+      .map((nameUnknown) => nameUnknown[0]);
+    const dataNumbersArray = dataNumberFunction(select, indexFilter);
+    const numbers = dataNumbersArray.map((namePlanet) => namePlanet[0]);
+    const typeFilter = select[0].value;
+    if (typeFilter === 'population') { setPopulationFilter([...numbers, ...unknown]); }
+    if (typeFilter === 'orbital_period') { setOrbitalFilter([...numbers, ...unknown]); }
+    if (typeFilter === 'diameter') { setDiameterFilter([...numbers, ...unknown]); }
+    if (typeFilter === 'rotation_period') { setRotationFilter([...numbers, ...unknown]); }
+    if (typeFilter === 'surface_water') { setSurfaceFilter([...numbers, ...unknown]); }
   };
 
   return (
@@ -50,11 +68,11 @@ function App() {
             data-testid="name-filter"
           />
           <select data-testid="column-filter">
-            <option>population</option>
-            <option>orbital_period</option>
-            <option>diameter</option>
-            <option>rotation_period</option>
-            <option>surface_water</option>
+            { !populationFilter.length && <option>population</option> }
+            { !orbitalFilter.length && <option>orbital_period</option> }
+            { !diameterFilter.length && <option>diameter</option> }
+            { !rotationFilter.length && <option>rotation_period</option> }
+            { !surfaceFilter.length && <option>surface_water</option> }
           </select>
           <select data-testid="comparison-filter">
             <option>maior que</option>
@@ -70,6 +88,36 @@ function App() {
           <button type="button" onClick={ clickButton } data-testid="button-filter">
             Filter
           </button>
+          { populationFilter.length > 0 > 0 && (
+            <>
+              <span>population </span>
+              <button type="button">X</button>
+            </>
+          )}
+          { orbitalFilter.length > 0 && (
+            <>
+              <span>orbital_period </span>
+              <button type="button">X</button>
+            </>
+          )}
+          { diameterFilter.length > 0 && (
+            <>
+              <span>diameter </span>
+              <button type="button">X</button>
+            </>
+          )}
+          { rotationFilter.length > 0 && (
+            <>
+              <span>rotation_period </span>
+              <button type="button">X</button>
+            </>
+          )}
+          { surfaceFilter.length > 0 && (
+            <>
+              <span>surface_water </span>
+              <button type="button">X</button>
+            </>
+          )}
           <table>
             <thead>
               <tr>
