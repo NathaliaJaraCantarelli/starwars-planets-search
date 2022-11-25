@@ -56,6 +56,14 @@ function App() {
     if (typeFilter === 'surface_water') { setSurfaceFilter([...numbers, ...unknown]); }
   };
 
+  const remove = () => {
+    setPopulationFilter([]);
+    setOrbitalFilter([]);
+    setDiameterFilter([]);
+    setRotationFilter([]);
+    setSurfaceFilter([]);
+  };
+
   return (
     <>
       {!isLoading && <span>Loading...</span>}
@@ -88,35 +96,38 @@ function App() {
           <button type="button" onClick={ clickButton } data-testid="button-filter">
             Filter
           </button>
+          <button type="button" onClick={ remove } data-testid="button-remove-filters">
+            Remove all filters
+          </button>
+          { diameterFilter.length > 0 && (
+            <span data-testid="filter">
+              diameter
+              <button type="button" onClick={ () => setDiameterFilter([]) }>X</button>
+            </span>
+          )}
           { populationFilter.length > 0 > 0 && (
-            <>
-              <span>population </span>
-              <button type="button">X</button>
-            </>
+            <span data-testid="filter">
+              population
+              <button type="button" onClick={ () => setPopulationFilter([]) }>X</button>
+            </span>
           )}
           { orbitalFilter.length > 0 && (
-            <>
-              <span>orbital_period </span>
-              <button type="button">X</button>
-            </>
-          )}
-          { diameterFilter.length > 0 && (
-            <>
-              <span>diameter </span>
-              <button type="button">X</button>
-            </>
+            <span data-testid="filter">
+              orbital_period
+              <button type="button" onClick={ () => setOrbitalFilter([]) }>X</button>
+            </span>
           )}
           { rotationFilter.length > 0 && (
-            <>
-              <span>rotation_period </span>
-              <button type="button">X</button>
-            </>
+            <span data-testid="filter">
+              rotation_period
+              <button type="button" onClick={ () => setRotationFilter([]) }>X</button>
+            </span>
           )}
           { surfaceFilter.length > 0 && (
-            <>
-              <span>surface_water </span>
-              <button type="button">X</button>
-            </>
+            <span data-testid="filter">
+              surface_water
+              <button type="button" onClick={ () => setSurfaceFilter([]) }>X</button>
+            </span>
           )}
           <table>
             <thead>
