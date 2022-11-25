@@ -5,6 +5,8 @@ import App from '../App';
 import FetchProvider, { FetchContext } from '../context/FetchProvider';
 import { dataHeader, dataPlanets, api } from './helpers/mockAPI';
 
+const buttonFilter = 'button-filter';
+
 describe('Testa o App', () => {
   test('Se o inicia com Loanding...', () => {
     const dez = 10;
@@ -53,7 +55,7 @@ describe('Testa o App', () => {
     );
     const hoth = screen.getByText(/Hoth/i);
     expect(hoth).toBeInTheDocument();
-    const btnFilter = screen.getByRole('button');
+    const btnFilter = screen.getByTestId(buttonFilter);
     userEvent.click(btnFilter);
     expect(hoth.textContent).not.toBe(/Hoth/i);
   });
@@ -69,7 +71,7 @@ describe('Testa o App', () => {
     expect(hoth).toBeInTheDocument();
     const comparisonFilter = screen.getByTestId('comparison-filter');
     comparisonFilter.value = 'menor que';
-    const btnFilter = screen.getByRole('button');
+    const btnFilter = screen.getByTestId(buttonFilter);
     userEvent.click(btnFilter);
     expect(hoth).not.toBeInTheDocument();
   });
@@ -89,7 +91,7 @@ describe('Testa o App', () => {
     comparisonFilter.value = 'igual a';
     const valueFilter = screen.getByTestId('value-filter');
     userEvent.type(valueFilter, '200000');
-    const btnFilter = screen.getByRole('button');
+    const btnFilter = screen.getByTestId(buttonFilter);
     userEvent.click(btnFilter);
     expect(tatooine).toBeInTheDocument();
     expect(hoth).not.toBeInTheDocument();
