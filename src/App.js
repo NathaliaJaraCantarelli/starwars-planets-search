@@ -12,6 +12,7 @@ function App() {
   const [diameterFilter, setDiameterFilter] = useState([]);
   const [rotationFilter, setRotationFilter] = useState([]);
   const [surfaceFilter, setSurfaceFilter] = useState([]);
+  const [stateSort, setStateSort] = useState(true);
 
   const searchNameFilter = dataPlanets
     .filter((planet) => planet[0].toLowerCase().includes(searchName))
@@ -64,6 +65,48 @@ function App() {
     setSurfaceFilter([]);
   };
 
+  if ((dataPlanets.length > 0) && (stateSort)) {
+    setStateSort(false);
+  }
+
+  const ascending = (indexFilter) => {
+    dataPlanets.sort((a, b) => {
+      const menosUm = -1;
+      if (parseInt(a[indexFilter], 10) < parseInt(b[indexFilter], 10)) {
+        return menosUm;
+      }
+      if (parseInt(a[indexFilter], 10) > parseInt(b[indexFilter], 10)) {
+        return 1;
+      } return 0;
+    });
+  };
+
+  const descending = (indexFilter) => {
+    dataPlanets.sort((a, b) => {
+      const menosUm = -1;
+      if (parseInt(a[indexFilter], 10) > parseInt(b[indexFilter], 10)) {
+        return menosUm;
+      }
+      if (parseInt(a[indexFilter], 10) < parseInt(b[indexFilter], 10)) {
+        return 1;
+      } return 0;
+    });
+  };
+
+  const sort = () => {
+    setStateSort(true);
+    const select = isLoading && document.getElementsByTagName('select');
+    const indexFilter = dataHeader.indexOf(select[2].value);
+    const radio = isLoading && document.getElementsByTagName('input');
+
+    if (radio[2].checked === true) {
+      ascending(indexFilter);
+    }
+    if (radio[3].checked === true) {
+      descending(indexFilter);
+    }
+  };
+
   return (
     <>
       {!isLoading && <span>Loading...</span>}
@@ -95,6 +138,32 @@ function App() {
           />
           <button type="button" onClick={ clickButton } data-testid="button-filter">
             Filter
+          </button>
+          <select data-testid="column-sort">
+            <option>population</option>
+            <option>orbital_period</option>
+            <option>diameter</option>
+            <option>rotation_period</option>
+            <option>surface_water</option>
+          </select>
+          <label htmlFor="sort">
+            <input
+              type="radio"
+              name="sort"
+              value="ASC"
+              data-testid="column-sort-input-asc"
+            />
+            <span>Ascending order </span>
+            <input
+              type="radio"
+              name="sort"
+              value="DESC"
+              data-testid="column-sort-input-desc"
+            />
+            <span>Descending order </span>
+          </label>
+          <button type="button" onClick={ sort } data-testid="column-sort-button">
+            Order
           </button>
           <button type="button" onClick={ remove } data-testid="button-remove-filters">
             Remove all filters
@@ -139,11 +208,17 @@ function App() {
             </thead>
             <tbody>
               {searchNameFilter.map((planetName, index) => (
-                <tr key={ `position${index}` }>
-                  {planetName.map((planetData, i) => (
-                    <td key={ `value${i}` }>{planetData}</td>
-                  ))}
-                </tr>
+                index === 0 ? (
+                  <tr key={ `position${index}` } data-testid="planet-name">
+                    {planetName.map((planetData, i) => (
+                      <td key={ `value${i}` }>{planetData}</td>
+                    ))}
+                  </tr>
+                ) : (
+                  <tr key={ `position${index}` }>
+                    {planetName.map((planetData, i) => (
+                      <td key={ `value${i}` }>{planetData}</td>))}
+                  </tr>)
               ))}
             </tbody>
           </table>

@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-// import { useHistory } from 'react-router-dom';
 
 export const FetchContext = createContext();
 
@@ -16,9 +15,9 @@ function FetchProvider({ children }) {
         const repos = await response.json();
         const tableHeader = repos.results;
         const tableData = [];
-        tableHeader.forEach((data) => {
-          delete data.residents;
-          tableData.push(Object.values(data));
+        tableHeader.forEach((name) => {
+          delete name.residents;
+          tableData.push(Object.values(name));
         });
         setDataPlanets(tableData);
         setDataHeader(Object.keys(tableHeader[0]));
